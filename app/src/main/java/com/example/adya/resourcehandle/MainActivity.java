@@ -225,7 +225,7 @@ else
      recyclerView.setLayoutManager(layoutManager);
      recyclerView.setItemAnimator(new DefaultItemAnimator());
      recyclerView.setAdapter(adapter);*/
-     adapter.notifyDataSetChanged();
+     //adapter.notifyDataSetChanged();
      myRef.push().setValue(dm);
      Toast.makeText(getApplicationContext(),"Item added",Toast.LENGTH_SHORT).show();
 
