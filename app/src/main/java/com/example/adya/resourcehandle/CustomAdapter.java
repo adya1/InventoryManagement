@@ -154,13 +154,13 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>  {
                                                          final String item=dm.getItemid();
                                                          database=FirebaseDatabase.getInstance();
                                                             myRef = database.getReference("message");
-                                                            myRef.addValueEventListener(new ValueEventListener() {
+                                                            myRef.orderByChild("itemid").equalTo(item).addValueEventListener(new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                                                     for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
-                                                                      String key=dataSnapshot1.child(item).getKey();
-                                                                      Toast.makeText(cntxt,"key of item"+key,Toast.LENGTH_SHORT).show();
+                                                                      String key=dataSnapshot1.getKey();
+                                                                      dataSnapshot1.getRef().removeValue();
 
 
                                                                     }
@@ -256,6 +256,7 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>  {
                     }
 
                     private void addemp() {
+                        final int position=(int)view.getTag();
                         LayoutInflater li = LayoutInflater.from(cntxt);
                         View promptsView = li.inflate(R.layout.prompt, null);
 
@@ -277,9 +278,32 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>  {
                                                 // get user input and set it to result
                                                 // edit text
                                                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                                String currentDateTime = dateFormat.format(new Date()); // Find todays date
+                                              final   String currentDateTime = dateFormat.format(new Date()); // Find todays date
 
                                                 textView2.setText(userInput.getText() + " at " + currentDateTime);
+
+                                                DataModel dm=new DataModel();
+                                                dm=dataSet.get(position);
+                                                final String item=dm.getItemid();
+                                                database=FirebaseDatabase.getInstance();
+                                                myRef = database.getReference("message");
+                                                myRef.orderByChild("itemid").equalTo(item).addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+
+                                                            String key=dataSnapshot1.getKey();
+                                                            myRef.child(key).child("empname").setValue(userInput.getText() + " at " + currentDateTime);
+
+                                                        }
+
+
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                    }
+                                                });
                                             }
                                         })
                                 .setNegativeButton("Cancel",
