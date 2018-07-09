@@ -15,6 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,9 +33,9 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>  {
 
     private ArrayList<DataModel> dataSet;
 
-
+    FirebaseDatabase database;
+    DatabaseReference myRef;
     private Context cntxt;
-
 
     public CustomAdapter(ArrayList<DataModel> data) {
         this.dataSet = data;
@@ -96,13 +102,15 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>  {
         final TextView textView2 = holder.textView2;
 
        final ImageView options=holder.iv;
+       holder.iv.setTag(listPosition);
         //textViewName.setText(dataSet.get(listPosition).getName() + " " + dataSet.get(listPosition).getId());
        // textView2.setText("Available");
         textViewName.setText(dataSet.get(listPosition).getItemid());
         textView2.setText(dataSet.get(listPosition).getEmpname());
         holder.iv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
+              final int position=(int)view.getTag();
                 //creating a popup menu
                 PopupMenu popup = new PopupMenu(cntxt,options);
                 //inflating menu from xml resource
@@ -141,6 +149,33 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>  {
                                                         if(passinput.getText().toString().equalsIgnoreCase("bel@123"))
                                                         {
                                                         Toast.makeText(cntxt,"Item can be deleted",Toast.LENGTH_SHORT).show();
+                                                         DataModel dm=new DataModel();
+                                                         dm=dataSet.get(position);
+                                                         final String item=dm.getItemid();
+                                                         database=FirebaseDatabase.getInstance();
+                                                            myRef = database.getReference("message");
+                                                            myRef.addValueEventListener(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+
+                                                                      String key=dataSnapshot1.child(item).getKey();
+                                                                      Toast.makeText(cntxt,"key of item"+key,Toast.LENGTH_SHORT).show();
+
+
+                                                                    }
+
+
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+
+                                                            dataSet.remove(position);
+                                                            notifyItemRemoved(position);
                                                         }
                                                         else
                                                             Toast.makeText(cntxt,"Wrong Password,you cannot delete",Toast.LENGTH_LONG).show();

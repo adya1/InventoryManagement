@@ -217,6 +217,7 @@ public class MainActivity  extends AppCompatActivity {
 
             data.add(0,dm);
      adapter.notifyDataSetChanged();}
+
 else
          data.add(0,dm);
      /*adapter = new CustomAdapter(data);
@@ -224,7 +225,7 @@ else
      recyclerView.setLayoutManager(layoutManager);
      recyclerView.setItemAnimator(new DefaultItemAnimator());
      recyclerView.setAdapter(adapter);*/
-     //adapter.notifyDataSetChanged();
+     adapter.notifyDataSetChanged();
      myRef.push().setValue(dm);
      Toast.makeText(getApplicationContext(),"Item added",Toast.LENGTH_SHORT).show();
 
