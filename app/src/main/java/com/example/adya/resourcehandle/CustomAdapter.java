@@ -120,11 +120,9 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>  {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
-                            case R.id.menu1:
-                                addemp();
-                                //handle men// get prompts.xml view
+                           // get prompts.xml view
 
-                                break;
+
                             case R.id.menu3:
                                 {LayoutInflater li = LayoutInflater.from(cntxt);
                                 View promptsView = li.inflate(R.layout.promptpass, null);
@@ -148,8 +146,9 @@ class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder>  {
                                                         // edit text
                                                         if(passinput.getText().toString().equalsIgnoreCase("bel@123"))
                                                         {
-                                                        Toast.makeText(cntxt,"Item can be deleted",Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(cntxt,"Item deleted",Toast.LENGTH_SHORT).show();
                                                          DataModel dm=new DataModel();
+
                                                          dm=dataSet.get(position);
                                                          final String item=dm.getItemid();
                                                          database=FirebaseDatabase.getInstance();
