@@ -1,24 +1,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="10dp">
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/editTextDialogUserInputWrapper"
+        >
 
-        android:text="Enter Employee name: "
-        android:textSize="15sp" />
 
     <EditText
         android:id="@+id/editTextDialogUserInput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:hint="Enter Employee Name"
+        >
 
         <requestFocus />
 
     </EditText>
+    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

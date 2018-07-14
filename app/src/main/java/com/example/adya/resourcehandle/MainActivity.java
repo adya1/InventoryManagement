@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,23 +34,24 @@ import java.util.Random;
 
 public class MainActivity  extends AppCompatActivity {
 
-    private static RecyclerView.Adapter adapter;
+    private static CustomAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private static RecyclerView recyclerView;
     private ArrayList<DataModel> data;
     static View.OnClickListener myOnClickListener;
-    private Random mRandom = new Random();
+
     FirebaseDatabase database;
     DatabaseReference myRef;
     ArrayList<ViewDataModel> list;
     /*private static ArrayList<Integer> removedItems;
      */
-
+ SearchView sv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sv=(SearchView)findViewById(R.id.mSearch);
         /*  myOnClickListener = new MyOnClickListener(this);*/
 
 
@@ -75,44 +78,7 @@ public class MainActivity  extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("message");
         view();
-       /* myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                list = new ArrayList<>();
-                // StringBuffer stringbuffer = new StringBuffer();
 
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-
-                    DataModel dataModel = dataSnapshot1.getValue(DataModel.class);
-
-                    ViewDataModel listdata = new ViewDataModel();
-                    String ename = dataModel.getEmpname();
-
-                    String id = dataModel.getItemid();
-                    listdata.setEmpname(ename);
-                    dataModel.setEmpname(ename);
-                    dataModel.setItemid(id);
-                    listdata.setItemid(id);
-
-                    list.add(listdata);
-                    data.add(dataModel);
-                    adapter = new CustomAdapter(data);
-
-
-                }
-
-
-                layoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(layoutManager);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                recyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });*/
 
     }
 
@@ -143,6 +109,8 @@ public class MainActivity  extends AppCompatActivity {
                     adapter = new CustomAdapter(data);
 
 
+
+
                 }
 
 
@@ -150,6 +118,19 @@ public class MainActivity  extends AppCompatActivity {
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(adapter);
+                sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String s) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String s) {
+                        adapter.getFilter().filter(s);
+                        return  false;
+                    }
+                });
+
             }
 
             @Override
@@ -222,10 +203,14 @@ public class MainActivity  extends AppCompatActivity {
 
                 // set prompts.xml to alertdialog builder
                 alertDialogBuilder.setView(promptsView);
+                //final TextInputLayout iteminputWrapper=(TextInputLayout)promptsView.findViewById(R.id.iteminputWrapper);
+                //final  TextInputLayout empinputWrapper=(TextInputLayout)promptsView.findViewById(R.id.empinputWrapper);
 
                 final EditText iteminput1 = (EditText) promptsView
                         .findViewById(R.id.iteminput);
                 final EditText empinput1=(EditText)promptsView.findViewById(R.id.empinput);
+              //  iteminputWrapper.setHint("Enter Item Name");
+              //  empinputWrapper.setHint("Enter Employee Name");
 
                 // set dialog message
                 alertDialogBuilder

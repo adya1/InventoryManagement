@@ -6,21 +6,23 @@
     android:orientation="vertical"
     android:padding="10dp" >
 
-    <TextView
-        android:id="@+id/passmsg"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/passinputWrapper">
 
-        android:text="Enter Password: "
-        android:textSize="15sp" />
+
 
     <EditText
         android:id="@+id/passinput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="Enter Password">
 
         <requestFocus />
 
     </EditText>
+    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>
